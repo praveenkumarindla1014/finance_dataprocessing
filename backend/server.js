@@ -25,20 +25,27 @@ app.use("/api/records", recordRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/users", userRoutes);
 
-// ─── Health Check ────────────────────────────────────────────────────
-app.get("/", (req, res) => {
-    res.json({
-        success: true,
-        message: "Finance Data Processing API is running 🚀",
-        version: "1.0.0",
-        endpoints: {
-            auth: "/api/auth",
-            records: "/api/records",
-            dashboard: "/api/dashboard",
-            users: "/api/users (admin only)",
-        },
+const path = require("path");
+
+if (process.env.NODE_ENV === "production") {
+    // Serve frontend build files
+    app.use(express.static(path.join(__dirname, "../frontend/build")));
+
+    // Handle SPA routing by returning index.html
+    app.get("*", (req, res) => {
+        res.sendFile(
+            path.resolve(__dirname, "../frontend", "build", "index.html")
+        );
     });
-});
+} else {
+    // ─── Health Check for Dev ────────────────────────────────────────────
+    app.get("/", (req, res) => {
+        res.json({
+            success: true,
+            message: "Finance Data API is running (Dev Mode)",
+        });
+    });
+}
 
 // ─── Error Handling Middleware ────────────────────────────────────────
 app.use(notFound);
