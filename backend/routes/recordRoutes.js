@@ -1,33 +1,34 @@
 const express = require("express");
 const router = express.Router();
-
 const {
     createRecord,
     getRecords,
+    getRecord,
     updateRecord,
-    deleteRecord
-} = require("/controllers/recordController");
-
+    deleteRecord,
+    restoreRecord,
+} = require("../controllers/recordController");
 const authMiddleware = require("../middleware/authMiddleware");
 const authorize = require("../middleware/roleMiddleware");
+const { validateRecord, validateObjectId } = require("../middleware/validateMiddleware");
 
-// 🔐 Apply auth to all routes
+// All record routes require authentication
 router.use(authMiddleware);
 
-// 👁 Viewer, Analyst, Admin → can view
+// ─── GET routes — Viewer, Analyst, Admin can view ────────────────────
 router.get("/", authorize("viewer", "analyst", "admin"), getRecords);
+router.get("/:id", authorize("viewer", "analyst", "admin"), validateObjectId, getRecord);
 
-// ➕ Only Admin → create
-router.post("/", authorize("admin"), createRecord);
+// ─── CREATE — Analyst and Admin can create ───────────────────────────
+router.post("/", authorize("analyst", "admin"), validateRecord, createRecord);
 
-// ✏ Only Admin → update
-router.put("/:id", authorize("admin"), updateRecord);
+// ─── UPDATE — Analyst and Admin can update ───────────────────────────
+router.put("/:id", authorize("analyst", "admin"), validateObjectId, validateRecord, updateRecord);
 
-// ❌ Only Admin → delete
-router.delete("/:id", authorize("admin"), deleteRecord);
+// ─── DELETE — Only Admin can delete ──────────────────────────────────
+router.delete("/:id", authorize("admin"), validateObjectId, deleteRecord);
 
-router.get("/summary", authorize("analyst", "admin"), (req, res) => {
-    res.json({ message: "Analytics data" });
-});
+// ─── RESTORE — Only Admin can restore soft-deleted records ───────────
+router.patch("/:id/restore", authorize("admin"), validateObjectId, restoreRecord);
 
 module.exports = router;
