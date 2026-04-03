@@ -1,0 +1,94 @@
+/* ══════════════════════════════════════════════════════════════════
+   RECORDS PAGE
+   ══════════════════════════════════════════════════════════════════ */
+
+.records-page {
+  max-width: 1400px;
+}
+
+/* ─── Toolbar ────────────────────────────────────────────────── */
+.records-toolbar {
+  padding: 16px 20px;
+  margin-bottom: 20px;
+}
+
+.records-search-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.records-search-wrapper {
+  position: relative;
+  flex: 1;
+  min-width: 240px;
+}
+
+.records-search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-tertiary);
+  pointer-events: none;
+}
+
+.records-search-input {
+  width: 100%;
+  padding-left: 40px !important;
+}
+
+.records-filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  padding-top: 16px;
+  margin-top: 16px;
+  border-top: 1px solid var(--border-color);
+}
+
+.btn-ghost.active {
+  background: var(--accent-primary-light);
+  color: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+/* ─── Table Card ─────────────────────────────────────────────── */
+.records-table-card {
+  overflow: hidden;
+}
+
+.table-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ─── Record Form ────────────────────────────────────────────── */
+.record-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.record-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 480px) {
+  .record-form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .records-search-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .records-search-wrapper {
+    min-width: 100%;
+  }
+}

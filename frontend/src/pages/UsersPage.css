@@ -1,0 +1,47 @@
+/* ══════════════════════════════════════════════════════════════════
+   USERS PAGE
+   ══════════════════════════════════════════════════════════════════ */
+
+.users-page {
+  max-width: 1400px;
+}
+
+.users-toolbar {
+  padding: 16px 20px;
+  margin-bottom: 20px;
+}
+
+.users-table-card {
+  overflow: hidden;
+}
+
+.user-name-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-avatar-sm {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--gradient-primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+.status-toggle {
+  cursor: pointer;
+  border: none;
+  transition: all var(--transition-fast);
+}
+
+.status-toggle:hover {
+  transform: scale(1.05);
+  opacity: 0.8;
+}
