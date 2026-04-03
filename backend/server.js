@@ -53,8 +53,12 @@ app.use(errorHandler);
 
 // ─── Connect to DB & Start Server ───────────────────────────────────
 const PORT = process.env.PORT || 5000;
+const seedDemoUsers = require("./utils/seed");
 
-connectDB().then(() => {
+connectDB().then(async () => {
+    // Seed demo accounts automatically for portfolio display
+    await seedDemoUsers();
+    
     app.listen(PORT, () => {
         console.log(`\n╔════════════════════════════════════════╗`);
         console.log(`║  Server running on port ${PORT}            ║`);
