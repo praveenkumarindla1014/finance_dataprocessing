@@ -7,119 +7,210 @@ A full-stack, modern web application for managing financial records (income and 
 ## ✨ Features
 
 ### 🔐 Authentication & Authorization
-*   **JWT-Based Auth**: Secure logins with JSON Web Tokens properly managed via interceptors.
-*   **Role-Based Access Control (RBAC)**: Fine-grained permissions dictating what users can see and do.
-*   **Sign-up/Login**: Dynamic authentication form supporting quick account creation across varied roles.
 
-### 👥 User Roles Matrix
-There are three hierarchy tiers in FinDash:
+* **JWT-Based Auth**: Secure login using JSON Web Tokens.
+* **Role-Based Access Control (RBAC)**: Controls what users can access.
+* **Sign-up/Login**: Dynamic authentication system.
 
-| Capability | Viewer | Analyst | Admin |
-|:---|:---:|:---:|:---:|
-| **View Dashboard (Recent Records)** | ✅ | ✅ | ✅ |
-| **View Analytics & Charts** | ❌ | ✅ | ✅ |
-| **Create & Update Financial Records** | ❌ | ✅ | ✅ |
-| **Fully Delete Records** | ❌ | ❌ | ✅ |
-| **Manage Users (Create, Edit, Deactivate)** | ❌ | ❌ | ✅ |
+---
+
+### 👥 User Roles
+
+| Capability            | Viewer | Analyst | Admin |
+| :-------------------- | :----: | :-----: | :---: |
+| View Dashboard        |    ✅   |    ✅    |   ✅   |
+| View Analytics        |    ❌   |    ✅    |   ✅   |
+| Create/Update Records |    ❌   |    ✅    |   ✅   |
+| Delete Records        |    ❌   |    ❌    |   ✅   |
+| Manage Users          |    ❌   |    ❌    |   ✅   |
+
+---
 
 ### 💰 Financial Records Module
-*   **Full CRUD**: Add, edit, delete, and view financial entries.
-*   **Filters**: Filter by income type, predefined categories, and multi-date ranges.
-*   **Search**: Dynamic text search bridging across descriptions and categories.
-*   **Smart Pagination**: Limit heavy loads dynamically using page chunks.
 
-### 📈 Beautiful Analytics Dashboard
-*   **Cards Summary**: Real-time insights covering Total Income, Total Expenses, Net Balance.
-*   **Visual Charts**: Built using **Recharts** for immersive insights:
-    *   *Area/Bar Charts*: Visualizing monthly income & expense trends.
-    *   *Donut Pie Charts*: Showcasing categorized breakdown distributions.
-
-### 🧱 UI/UX
-*   **Responsive**: Fluid grid layout supporting both mobile and desktop screens.
-*   **Theming**: Local-persistent **Dark/Light Mode** toggle switch.
-*   **Glassmorphism & Gradients**: Polished modern aesthetic.
+* Full CRUD operations (Create, Read, Update, Delete)
+* Filters (category, type, date)
+* Search functionality
+* Pagination support
 
 ---
 
-## 🛠️ Technology Stack
+### 📈 Analytics Dashboard
 
-**Frontend** (Located in `/frontend` folder)
-*   **React 19**
-*   **React Router 7** - For routing and Protected Route definitions.
-*   **Recharts** - Dynamic financial analytics rendering.
-*   **Axios** - Service layer featuring interceptors to manage token and redirect lifecycles.
-*   **Vanilla CSS + Custom Variables** - Complete scalable Tokenized Design System for high aesthetics.
-
-**Backend** (Located in `/backend` folder)
-*   **Node.js / Express v5**
-*   **MongoDB (Mongoose)** - Database storage modeling.
-*   **JWT & Bcrypt** - Hashing and stateless authentication.
-*   **RESTful APIs** - Modular API Controllers isolating dashboard, auth, users, and records.
+* Total Income, Expenses, Balance
+* Monthly Trends (charts)
+* Category Breakdown (pie chart)
+* Recent Activity
 
 ---
 
-## 🚀 Running the Project Locally
+## 🛠️ Tech Stack
 
-To run this application locally, you will need **Node.js** and **MongoDB** installed on your machine.
+### Frontend
 
-### 1. Setup Backend
-Open a terminal and navigate to the backend directory:
+* React.js
+* React Router
+* Recharts
+* Axios
+
+### Backend
+
+* Node.js + Express
+* MongoDB (Mongoose)
+* JWT Authentication
+* REST APIs
+
+---
+
+## 📊 Dashboard Summary APIs (Core Logic)
+
+These APIs provide **aggregated financial insights** (not just raw data).
+
+---
+
+### 🔹 1. Summary API
+
+**GET /api/dashboard/summary**
+
+Returns:
+
+* Total Income
+* Total Expenses
+* Net Balance
+
+```json
+{
+  "totalIncome": 16500,
+  "totalExpense": 9200,
+  "balance": 7300
+}
+```
+
+---
+
+### 🔹 2. Category Breakdown
+
+**GET /api/dashboard/category**
+
+Groups data by category:
+
+```json
+[
+  { "category": "Food", "total": 5000 },
+  { "category": "Rent", "total": 8000 }
+]
+```
+
+---
+
+### 🔹 3. Monthly Trends
+
+**GET /api/dashboard/trends**
+
+Returns monthly data:
+
+```json
+[
+  { "month": 1, "income": 5000, "expense": 3000 },
+  { "month": 2, "income": 7000, "expense": 2000 }
+]
+```
+
+---
+
+### 🔹 4. Recent Activity
+
+**GET /api/dashboard/recent**
+
+Returns latest transactions:
+
+```json
+[
+  { "amount": 5000, "type": "income" },
+  { "amount": 2000, "type": "expense" }
+]
+```
+
+---
+
+### 🔐 Access Control
+
+* Viewer → View only
+* Analyst → View + Analytics
+* Admin → Full access
+
+---
+
+### 🧠 Key Concept
+
+These APIs use **MongoDB Aggregation** to convert raw data into meaningful insights for dashboard visualization.
+
+---
+
+## 🚀 Running the Project
+
+### Backend Setup
+
 ```bash
 cd backend
 npm install
 ```
 
-Configure your `.env` variables in the `/backend` folder:
+Create `.env`:
+
 ```env
 PORT=5000
-NODE_ENV=development
 MONGO_URI=mongodb://localhost:27017/financedata
-JWT_SECRET=your_super_secret_jwt_key
+JWT_SECRET=your_secret
 JWT_EXPIRES_IN=7d
 ```
 
-Start the backend API server:
+Run:
+
 ```bash
 npm run dev
 ```
-*(The server will be running on `http://localhost:5000`)*
 
-### 2. Setup Frontend
-Open a **new** terminal and navigate to the frontend directory:
+---
+
+### Frontend Setup
+
 ```bash
 cd frontend
 npm install
-```
-
-Start the frontend development server:
-```bash
 npm start
 ```
-*(The React application will be available at `http://localhost:3000`)*
-
-> [!NOTE] 
-> The frontend's `package.json` includes `"proxy": "http://localhost:5000"`. It automatically routes backend requests correctly and helps avoid CORS issues during active development.
 
 ---
 
-## 🧪 Demo Login Credentials
+## 🧪 Demo Credentials
 
-Once your backend is running, you can create new custom accounts via the UI's **Sign Up** interface. Alternatively, you can create/test using the below identities:
-
-| Role | Email | Password |
-|---|---|---|
-| **Admin** | admin@findash.com | admin123 |
-| **Analyst**| analyst@findash.com | analyst123 |
-| **Viewer** | viewer@findash.com | viewer123 |
-
-*(If they do not exist inside your Database yet, simply click "Create Account" on the Login page and provision them yourself!)*
+| Role    | Email                                             | Password   |
+| ------- | ------------------------------------------------- | ---------- |
+| Admin   | [admin@findash.com](mailto:admin@findash.com)     | admin123   |
+| Analyst | [analyst@findash.com](mailto:analyst@findash.com) | analyst123 |
+| Viewer  | [viewer@findash.com](mailto:viewer@findash.com)   | viewer123  |
 
 ---
 
-## 📂 Architecture Note
+## 📂 Architecture
 
-*   **API Structure**: The backend utilizes a scalable architecture mapping global errors through centralized `errorMiddleware`, verifying tokens with `authMiddleware`, and evaluating route safety with `roleMiddleware`.
-*   **React Layer**: The App runs inside nested context hierarchies `ThemeContext -> AuthContext -> Router`, making `useTheme()` and `useAuth()` universally accessible custom hooks.
+* **Backend**: Controllers, Models, Routes, Middleware
+* **Auth Middleware**: Verifies JWT
+* **Role Middleware**: Controls access
+* **Error Middleware**: Centralized error handling
 
 ---
+
+## 🎯 Conclusion
+
+This project demonstrates:
+
+* Backend architecture design
+* Role-based access control
+* Data aggregation using MongoDB
+* Real-world dashboard API development
+
+---
+
 *Created by Praveen Kumar*
